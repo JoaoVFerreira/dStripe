@@ -5,13 +5,14 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./INFTCollection.sol";
 
-contract DestripeCollection is ERC721, Ownable {
+contract DestripeCollection is INFTCollection, ERC721, Ownable {
   uint256 private _tokenIds;
   address public authorizedContract;
   string public baseUri = "http://localhost:3000/nfts";
 
-  constructor(address initialOwner) ERC721("DestripeCollection", "DSP") Ownable(initialOwner){}
+  constructor(address initialOwner) ERC721("Destripe", "DSP") Ownable(initialOwner){}
 
   function setAuthorizedContract (address newAuthorizedContract) external onlyOwner {
     authorizedContract = newAuthorizedContract;
@@ -29,7 +30,7 @@ contract DestripeCollection is ERC721, Ownable {
     return string.concat(_baseURI(), Strings.toString(tokenId), ".json");
   }
 
-  function setApprovalForAll (address operator, bool approved) public virtual override (ERC721) onlyOwner {
+  function setApprovalForAll (address operator, bool approved) public virtual override (IERC721, ERC721) onlyOwner {
     _setApprovalForAll(operator, msg.sender, approved);
   }
 
